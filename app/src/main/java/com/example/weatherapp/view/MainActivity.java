@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.weatherapp.R;
 import com.example.weatherapp.databinding.ActivityMainBinding;
 import com.example.weatherapp.model.currentweathermodel.CurrentWeatherResponse;
-import com.example.weatherapp.model.geocodingmodel.GeocodingResponse;
 import com.example.weatherapp.viewmodel.WeatherViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,32 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
-        mainBinding.searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String cityName = mainBinding.cityName.getText().toString().toLowerCase().trim();
-                viewModel.getGeocodingResponse(cityName).observe(MainActivity.this, new Observer<GeocodingResponse>() {
-                    @Override
-                    public void onChanged(GeocodingResponse geocodingResponse) {
-                        if (geocodingResponse != null && !geocodingResponse.getResults().isEmpty()) {
-                            lat = (double) geocodingResponse.getResults().get(0).getGeometry().getLocation().getLat();
-                            lon = (double) geocodingResponse.getResults().get(0).getGeometry().getLocation().getLng();
-                            viewModel.getCurrentWeatherResponse(lat, lon).observe(MainActivity.this, new Observer<CurrentWeatherResponse>() {
-                                @Override
-                                public void onChanged(CurrentWeatherResponse currentWeatherResponse) {
-                                    if (currentWeatherResponse != null) {
-                                        mainBinding.cityName.setText(currentWeatherResponse.getName());
-                                    } else {
-                                        Log.e("current weather error", "Current weather response call failed");
-                                    }
-                                }
-                            });
-                        } else {
-                            Log.e("Geocoding Error", "No results found");
-                        }
-                    }
-                });
-            }
-        });
+
     }
 }

@@ -1,7 +1,6 @@
 package com.example.weatherapp.api;
 
 import com.example.weatherapp.model.currentweathermodel.CurrentWeatherResponse;
-import com.example.weatherapp.model.geocodingmodel.GeocodingResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

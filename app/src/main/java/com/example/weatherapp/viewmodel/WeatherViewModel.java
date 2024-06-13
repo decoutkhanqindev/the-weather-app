@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.weatherapp.model.ApiServiceRepository;
 import com.example.weatherapp.model.currentweathermodel.CurrentWeatherResponse;
-import com.example.weatherapp.model.geocodingmodel.GeocodingResponse;
 
 public class WeatherViewModel extends AndroidViewModel {
     private final ApiServiceRepository apiServiceRepository;
