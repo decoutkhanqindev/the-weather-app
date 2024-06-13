@@ -25,43 +25,10 @@
             android:orientation="vertical"
             tools:ignore="UselessLeaf">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/nameCityInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="32dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:ems="10"
-                    android:hint="Enter name of city"
-                    android:inputType="text"
-                    android:textColor="@color/white"
-                    android:textColorHint="#8C9EFF"
-                    android:textSize="20sp"
-                    tools:ignore="Autofill,HardcodedText,InefficientWeight,VisualLintTextFieldSize" />
-
-                <ImageButton
-                    android:id="@+id/searchBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:src="@android:drawable/ic_search_category_default"
-                    tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16sp"
+                android:layout_marginTop="32sp"
                 android:orientation="vertical">
 
                 <TextView
@@ -133,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/background2"
                 android:orientation="horizontal"
@@ -266,7 +233,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="10dp"
                 android:orientation="horizontal">
 
