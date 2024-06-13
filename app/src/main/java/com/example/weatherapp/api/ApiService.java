@@ -13,8 +13,4 @@ public interface ApiService {
     Call<CurrentWeatherResponse> getCurrentWeather(@Query("lat") double lat,
                                                    @Query("lon") double lon,
                                                    @Query("appid") String apiKey);
-
-    @GET("maps/api/geocode/json")
-    Call<GeocodingResponse>  getGeocoding(@Query("address") String address,
-                                          @Query("key") String apiKey);
 }

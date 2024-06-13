@@ -21,8 +21,4 @@ public class WeatherViewModel extends AndroidViewModel {
     public MutableLiveData<CurrentWeatherResponse> getCurrentWeatherResponse(double lat, double lon){
         return apiServiceRepository.getCurrentWeatherResponseMutableLiveData(lat, lon);
     }
-
-    public MutableLiveData<GeocodingResponse> getGeocodingResponse(String address){
-        return apiServiceRepository.getGeocodingResponseMutableLiveData(address);
-    }
 }
