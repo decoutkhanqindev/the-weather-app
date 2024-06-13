@@ -48,13 +48,14 @@
                     android:textSize="20sp"
                     tools:ignore="Autofill,HardcodedText,InefficientWeight,VisualLintTextFieldSize" />
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/searchBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32sp"
+                    android:layout_marginTop="32dp"
+                    android:backgroundTint="@android:color/transparent"
                     android:src="@android:drawable/ic_search_category_default"
-                    tools:ignore="ContentDescription,ImageContrastCheck" />
+                    tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
             </LinearLayout>
 
             <LinearLayout
@@ -152,8 +153,7 @@
                         android:id="@+id/pRainImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src=""
-                        app:srcCompat="@drawable/rain"
+                        android:src="@drawable/rain"
                         tools:ignore="ContentDescription" />
 
                     <TextView
@@ -193,8 +193,7 @@
                         android:id="@+id/windSpeedImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src=""
-                        app:srcCompat="@drawable/wind"
+                        android:src="@drawable/wind"
                         tools:ignore="ContentDescription" />
 
                     <TextView
