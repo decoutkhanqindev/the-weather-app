@@ -64,7 +64,7 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/dateText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -253,7 +253,7 @@
                     android:layout_height="match_parent"
                     android:backgroundTint="@android:color/transparent"
                     android:text="Next 3 hours in 5 days  >"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     tools:ignore="HardcodedText,SmallSp" />
             </LinearLayout>
 

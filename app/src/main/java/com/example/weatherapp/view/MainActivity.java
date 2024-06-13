@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.weatherapp.R;
 import com.example.weatherapp.databinding.ActivityMainBinding;
 import com.example.weatherapp.model.currentweathermodel.CurrentWeatherResponse;
@@ -33,6 +34,10 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -71,8 +76,26 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(CurrentWeatherResponse currentWeatherResponse) {
                 if (currentWeatherResponse != null) {
                     mainBinding.cityName.setText(currentWeatherResponse.getName());
+                    mainBinding.weatherDescriptionText.setText(currentWeatherResponse.getWeather().get(0).getDescription());
 
+                    long timestamp = currentWeatherResponse.getDt();
+                    Date date = new Date(timestamp * 1000L);
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMMM dd '|' hh:mm a");
+                    simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    String formattedDate = simpleDateFormat.format(date);
+                    mainBinding.dateText.setText(formattedDate);
 
+                    double currentTemp = (double) currentWeatherResponse.getMain().getTemp();
+                    double tempCelsius  = currentTemp - 273.15;
+                    @SuppressLint("DefaultLocale") String formattedTemp = String.format("%.0f", tempCelsius) + "°C";
+                    mainBinding.currentTemp.setText(formattedTemp);
+
+                    double maxTemp = (double) currentWeatherResponse.getMain().getTempMax();
+                    double maxTempCelsius  = maxTemp - 273.15;
+                    double minTemp = (double) currentWeatherResponse.getMain().getTempMin();
+                    double minTempCelsius  = minTemp - 273.15;
+                    @SuppressLint("DefaultLocale") String formattedMinMaxTemp = String.format("L:%.0f  H:%.0f", minTempCelsius, maxTempCelsius) + "°";
+                    mainBinding.minMaxTemp.setText(formattedMinMaxTemp);
                 }
             }
         });
