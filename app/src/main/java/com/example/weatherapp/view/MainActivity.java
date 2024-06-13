@@ -16,10 +16,12 @@ import com.example.weatherapp.R;
 import com.example.weatherapp.databinding.ActivityMainBinding;
 import com.example.weatherapp.model.currentweathermodel.CurrentWeatherResponse;
 import com.example.weatherapp.viewmodel.WeatherViewModel;
+import com.google.android.gms.location.FusedLocationProviderClient;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mainBinding;
     private WeatherViewModel viewModel;
+    private FusedLocationProviderClient fusedLocationClient;
     private double lat = 0, lon = 0;
 
     @Override
