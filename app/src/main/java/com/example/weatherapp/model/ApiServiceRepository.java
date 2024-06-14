@@ -61,7 +61,7 @@ public class ApiServiceRepository {
                 if (forecastWeatherResponse != null){
                     forecastWeatherResponseMutableLiveData.setValue(forecastWeatherResponse);
                 } else {
-                    Log.e("CurrentWeatherRepository", "Response unsuccessful or body is null");
+                    Log.e("ForecastWeatherRepository", "Response unsuccessful or body is null");
                 }
             }
 

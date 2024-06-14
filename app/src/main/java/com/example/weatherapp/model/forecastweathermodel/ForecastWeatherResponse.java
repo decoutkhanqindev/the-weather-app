@@ -1,5 +1,6 @@
 package com.example.weatherapp.model.forecastweathermodel;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
@@ -18,7 +19,7 @@ public class ForecastWeatherResponse{
 	private int message;
 
 	@SerializedName("list")
-	private List<ListItem> list;
+	private ArrayList<ListItem> list;
 
 	public void setCity(City city){
 		this.city = city;
@@ -52,11 +53,11 @@ public class ForecastWeatherResponse{
 		return message;
 	}
 
-	public void setList(List<ListItem> list){
+	public void setList(ArrayList<ListItem> list){
 		this.list = list;
 	}
 
-	public List<ListItem> getList(){
+	public ArrayList<ListItem> getList(){
 		return list;
 	}
 }

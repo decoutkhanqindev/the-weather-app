@@ -4,12 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:layout_margin="10dp"
-    app:cardCornerRadius="5dp">
+    android:backgroundTint="@android:color/transparent"
+    android:elevation="5dp"
+    app:cardCornerRadius="20dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:padding="10dp"
         android:background="@drawable/background3"
@@ -28,8 +31,8 @@
 
         <ImageView
             android:id="@+id/hourlyImg"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/cloudy"
             tools:ignore="ContentDescription,ImageContrastCheck" />
 
