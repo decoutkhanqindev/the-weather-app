@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.weatherapp.model.ApiServiceRepository;
 import com.example.weatherapp.model.currentweathermodel.CurrentWeatherResponse;
+import com.example.weatherapp.model.forecastweathermodel.ForecastWeatherResponse;
 
 public class WeatherViewModel extends AndroidViewModel {
     private final ApiServiceRepository apiServiceRepository;
@@ -19,5 +20,9 @@ public class WeatherViewModel extends AndroidViewModel {
 
     public MutableLiveData<CurrentWeatherResponse> getCurrentWeatherResponse(double lat, double lon){
         return apiServiceRepository.getCurrentWeatherResponseMutableLiveData(lat, lon);
+    }
+
+    public MutableLiveData<ForecastWeatherResponse> getForecastWeatherResponse(double lat, double lon){
+        return apiServiceRepository.getForecastWeatherResponseMutableLiveData(lat, lon);
     }
 }
