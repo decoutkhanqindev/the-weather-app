@@ -22,10 +22,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weatherapp.R;
 import com.example.weatherapp.databinding.ActivityMainBinding;
 import com.example.weatherapp.model.currentweathermodel.CurrentWeatherResponse;
+import com.example.weatherapp.model.forecastweathermodel.ForecastWeatherResponse;
+import com.example.weatherapp.model.forecastweathermodel.ListItem;
 import com.example.weatherapp.viewmodel.WeatherViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -36,7 +40,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 
@@ -48,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
     int PERMISSION_ID = 44;
 
     private double lat = 0, lon = 0;
+
+    private RecyclerView recyclerView;
+    private HourlyAdapter adapter;
+    private ArrayList<ListItem> listItemArrayList = new ArrayList<>();
 
     @SuppressLint("MissingPermission")
     @Override
@@ -145,6 +155,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void updatesForecastWeatherUI(double lat, double lon) {
+        viewModel.getForecastWeatherResponse(lat, lon).observe(MainActivity.this, new Observer<ForecastWeatherResponse>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onChanged(ForecastWeatherResponse forecastWeatherResponse) {
+                if (forecastWeatherResponse != null) {
+                    listItemArrayList = forecastWeatherResponse.getList();
+                    adapter = new HourlyAdapter(MainActivity.this, listItemArrayList);
+                    recyclerView = mainBinding.recyclerView;
+                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL,false));
+                    adapter.filterCurrentDay();
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
     @SuppressLint("MissingPermission")
     private void getLastLocation() {
         if (checkPermissions()) {
@@ -158,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                             lon = location.getLongitude();
                             Log.e("onComplete: ", "lat:" + lat + "lon:" + lon);
                             updatesCurrentWeatherUI(lat, lon);
+                            updatesForecastWeatherUI(lat, lon);
                         } else {
                             requestNewLocationData();
                         }
@@ -206,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
                 double lat = lastLocation.getLatitude();
                 double lon = lastLocation.getLongitude();
                 updatesCurrentWeatherUI(lat, lon);
+                updatesForecastWeatherUI(lat, lon);
             }
         }
     };
