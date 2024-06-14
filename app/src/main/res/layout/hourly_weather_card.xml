@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="5dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:background="@drawable/background3"
+        android:orientation="vertical"
+        tools:ignore="UseCompoundDrawables,UselessLeaf">
+
+        <TextView
+            android:id="@+id/hourlyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="7 AM"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            tools:ignore="HardcodedText" />
+
+        <ImageView
+            android:id="@+id/hourlyImg"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/cloudy"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
+
+        <TextView
+            android:id="@+id/hourlyTempText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="25°C"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
