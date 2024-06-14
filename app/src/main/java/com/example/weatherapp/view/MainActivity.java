@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -22,7 +23,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.example.weatherapp.R;
 import com.example.weatherapp.databinding.ActivityMainBinding;
 import com.example.weatherapp.model.currentweathermodel.CurrentWeatherResponse;
@@ -72,11 +72,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void updatesCurrentWeatherUI(double lat, double lon) {
         viewModel.getCurrentWeatherResponse(lat, lon).observe(MainActivity.this, new Observer<CurrentWeatherResponse>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onChanged(CurrentWeatherResponse currentWeatherResponse) {
                 if (currentWeatherResponse != null) {
                     mainBinding.cityName.setText(currentWeatherResponse.getName());
                     mainBinding.weatherDescriptionText.setText(currentWeatherResponse.getWeather().get(0).getDescription());
+
+                    String mainGroup = currentWeatherResponse.getWeather().get(0).getMain();
+                    switch (mainGroup) {
+                        case "Thunderstorm":
+                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.storm);
+                            break;
+                        case "Rain":
+                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.rainy);
+                            break;
+                        case "Snow":
+                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.snowy);
+                            break;
+                        case "Atmosphere":
+                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.atmosphere);
+                            break;
+                        case "Clear":
+                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.sunny);
+                            break;
+                        default:
+                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.cloudy);
+                            break;
+                    }
 
                     long timestamp = currentWeatherResponse.getDt();
                     Date date = new Date(timestamp * 1000L);
@@ -86,16 +109,37 @@ public class MainActivity extends AppCompatActivity {
                     mainBinding.dateText.setText(formattedDate);
 
                     double currentTemp = (double) currentWeatherResponse.getMain().getTemp();
-                    double tempCelsius  = currentTemp - 273.15;
+                    double tempCelsius = currentTemp - 273.15;
                     @SuppressLint("DefaultLocale") String formattedTemp = String.format("%.0f", tempCelsius) + "°C";
                     mainBinding.currentTemp.setText(formattedTemp);
 
                     double maxTemp = (double) currentWeatherResponse.getMain().getTempMax();
-                    double maxTempCelsius  = maxTemp - 273.15;
+                    double maxTempCelsius = maxTemp - 273.15;
                     double minTemp = (double) currentWeatherResponse.getMain().getTempMin();
-                    double minTempCelsius  = minTemp - 273.15;
-                    @SuppressLint("DefaultLocale") String formattedMinMaxTemp = String.format("L:%.0f  H:%.0f", minTempCelsius, maxTempCelsius) + "°";
+                    double minTempCelsius = minTemp - 273.15;
+                    @SuppressLint("DefaultLocale") String formattedMinMaxTemp = String.format("L:%.0f°  H:%.0f°", minTempCelsius, maxTempCelsius);
                     mainBinding.minMaxTemp.setText(formattedMinMaxTemp);
+
+                    if (currentWeatherResponse.getRain() != null) {
+                        Double pRain = currentWeatherResponse.getRain().getJsonMember1h();
+                        mainBinding.pRainText.setText((pRain * 100) + "%");
+                    } else {
+                        mainBinding.pRainText.setText("0%");
+                    }
+
+                    if (currentWeatherResponse.getWind() != null){
+                        Double speed = currentWeatherResponse.getWind().getSpeed();
+                        mainBinding.windSpeedText.setText((speed) + " m/s");
+                    } else {
+                        mainBinding.windSpeedText.setText("error");
+                    }
+
+                    if (currentWeatherResponse.getMain().getHumidity() != 0){
+                        int pHumidity = currentWeatherResponse.getMain().getHumidity();
+                        mainBinding.pHumidityText.setText(pHumidity + "%");
+                    } else {
+                        mainBinding.pHumidityText.setText("error");
+                    }
                 }
             }
         });
@@ -109,12 +153,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         Location location = task.getResult();
-                        lat = location.getLatitude();
-                        lon = location.getLongitude();
-                        if (location == null) {
-                            requestNewLocationData();
-                        } else {
+                        if (location != null) {
+                            lat = location.getLatitude();
+                            lon = location.getLongitude();
+                            Log.e("onComplete: ", "lat:" + lat + "lon:" + lon);
                             updatesCurrentWeatherUI(lat, lon);
+                        } else {
+                            requestNewLocationData();
                         }
                     }
                 });
@@ -132,10 +177,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean checkPermissions() {
-        return ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     private boolean isLocationEnabled() {
@@ -145,17 +188,16 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     private void requestNewLocationData() {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(5);
-        locationRequest.setFastestInterval(0);
-        locationRequest.setNumUpdates(1);
+        LocationRequest locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(5000)
+                .setFastestInterval(2000)
+                .setNumUpdates(1);
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.myLooper());
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());;
     }
 
-    private final LocationCallback locationCallBack = new LocationCallback() {
+    private final LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull LocationResult locationResult) {
             super.onLocationResult(locationResult);

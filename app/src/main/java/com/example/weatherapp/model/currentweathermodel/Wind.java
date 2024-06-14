@@ -8,10 +8,10 @@ public class Wind{
 	private int deg;
 
 	@SerializedName("speed")
-	private Object speed;
+	private Double speed;
 
 	@SerializedName("gust")
-	private Object gust;
+	private Double gust;
 
 	public void setDeg(int deg){
 		this.deg = deg;
@@ -21,19 +21,19 @@ public class Wind{
 		return deg;
 	}
 
-	public void setSpeed(Object speed){
+	public void setSpeed(Double speed){
 		this.speed = speed;
 	}
 
-	public Object getSpeed(){
+	public Double getSpeed(){
 		return speed;
 	}
 
-	public void setGust(Object gust){
+	public void setGust(Double gust){
 		this.gust = gust;
 	}
 
-	public Object getGust(){
+	public Double getGust(){
 		return gust;
 	}
 }
