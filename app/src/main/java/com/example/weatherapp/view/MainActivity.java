@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -78,6 +79,14 @@ public class MainActivity extends AppCompatActivity {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+
+        mainBinding.next3h5daysBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ForecastActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void updatesCurrentWeatherUI(double lat, double lon) {
@@ -222,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                 .setFastestInterval(2000)
                 .setNumUpdates(1);
 
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());;
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 
     private final LocationCallback locationCallback = new LocationCallback() {
