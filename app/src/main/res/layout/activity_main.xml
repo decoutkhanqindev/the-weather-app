@@ -252,7 +252,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="Next 3 hours in 5 days  >"
+                    android:text="Next 5 days  >"
                     android:textSize="15sp"
                     tools:ignore="HardcodedText,SmallSp" />
             </LinearLayout>
