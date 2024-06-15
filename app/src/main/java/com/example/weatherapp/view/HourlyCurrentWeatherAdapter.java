@@ -9,34 +9,32 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.weatherapp.R;
-import com.example.weatherapp.databinding.HourlyWeatherCardBinding;
+import com.example.weatherapp.databinding.HourlyCurrentWeatherCardBinding;
 import com.example.weatherapp.model.forecastweathermodel.ListItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
 
-public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.HourlyViewHolder> {
+public class HourlyCurrentWeatherAdapter extends RecyclerView.Adapter<HourlyCurrentWeatherAdapter.HourlyCurrentWeatherViewHolder> {
     private final Context context;
     private final ArrayList<ListItem> listItems;
 
-    public HourlyAdapter(Context context, ArrayList<ListItem> listItems) {
+    public HourlyCurrentWeatherAdapter(Context context, ArrayList<ListItem> listItems) {
         this.context = context;
         this.listItems = listItems;
     }
 
     @NonNull
     @Override
-    public HourlyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HourlyCurrentWeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        HourlyWeatherCardBinding binding = HourlyWeatherCardBinding.inflate(layoutInflater, parent, false);
-        return new HourlyViewHolder(binding);
+        HourlyCurrentWeatherCardBinding binding = HourlyCurrentWeatherCardBinding.inflate(layoutInflater, parent, false);
+        return new HourlyCurrentWeatherViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HourlyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HourlyCurrentWeatherViewHolder holder, int position) {
         ListItem listItem = listItems.get(position);
 
         // Lọc các mục cho ngày hiện tại
@@ -105,10 +103,10 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.HourlyView
         notifyDataSetChanged();
     }
 
-    public static class HourlyViewHolder extends RecyclerView.ViewHolder {
-        private final HourlyWeatherCardBinding binding;
+    public static class HourlyCurrentWeatherViewHolder extends RecyclerView.ViewHolder {
+        private final HourlyCurrentWeatherCardBinding binding;
 
-        public HourlyViewHolder(@NonNull HourlyWeatherCardBinding binding) {
+        public HourlyCurrentWeatherViewHolder(@NonNull HourlyCurrentWeatherCardBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

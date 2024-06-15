@@ -43,7 +43,6 @@ import com.google.android.gms.tasks.Task;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 
 
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private double lat = 0, lon = 0;
 
     private RecyclerView recyclerView;
-    private HourlyAdapter adapter;
+    private HourlyCurrentWeatherAdapter adapter;
     private ArrayList<ListItem> listItemArrayList = new ArrayList<>();
 
     @SuppressLint("MissingPermission")
@@ -84,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ForecastActivity.class);
+                intent.putExtra("lat", lat);
+                intent.putExtra("lon", lon);
                 startActivity(intent);
             }
         });
@@ -171,9 +172,9 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(ForecastWeatherResponse forecastWeatherResponse) {
                 if (forecastWeatherResponse != null) {
                     listItemArrayList = forecastWeatherResponse.getList();
-                    adapter = new HourlyAdapter(MainActivity.this, listItemArrayList);
                     recyclerView = mainBinding.recyclerView;
                     recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL,false));
+                    adapter = new HourlyCurrentWeatherAdapter(MainActivity.this, listItemArrayList);
                     adapter.filterCurrentDay();
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
