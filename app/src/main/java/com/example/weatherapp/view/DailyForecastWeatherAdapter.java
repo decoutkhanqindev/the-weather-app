@@ -2,6 +2,7 @@ package com.example.weatherapp.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -15,6 +16,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+
 
 public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForecastWeatherAdapter.DailyForecastWeatherViewHolder> {
     Context context;
@@ -40,12 +44,11 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
         @SuppressLint("SimpleDateFormat") SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         @SuppressLint("SimpleDateFormat") SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-        String itemDate = listItem.getDtTxt(); // Định dạng chuỗi ban đầu: yyyy-MM-dd HH:mm:ss
-        Date date = null; // Chuyển chuỗi thành đối tượng Date
+        String itemDate = listItem.getDtTxt(); // Định dạng chuỗi ban đầu: yyyy-MM-dd HH:mm:ss\
         try {
-            date = inputFormat.parse(itemDate);
-            String formattedDate = outputFormat.format(date); // Định dạng lại đối tượng Date thành chuỗi theo định dạng mới
-            holder.binding.dateForecast.setText(formattedDate);
+            Date currentDate = inputFormat.parse(itemDate);
+            String currentFormattedDate = outputFormat.format(currentDate);
+            holder.binding.dateForecast.setText(currentFormattedDate);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -57,19 +60,21 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void filterFromTomorrow() {
-        @SuppressLint("SimpleDateFormat") String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        ArrayList<ListItem> filteredList = new ArrayList<>();
+    public void filterTomorrowAndUniquesDate(){
+        Date todayDate = new Date();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat spfDate = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedTodayDate = spfDate.format(todayDate);
+        LinkedHashMap<String, ListItem> listItemLinkedHashMap = new LinkedHashMap<>();
 
-        for (ListItem item : listItemArrayList) {
-            String itemDate = item.getDtTxt().substring(0, 10); // Lấy phần đầu tiên yyyy-MM-dd từ dt_txt
-            if (itemDate.compareTo(todayDate) > 0) { // Chỉ thêm các mục từ ngày mai trở đi
-                filteredList.add(item);
+        for (ListItem item : listItemArrayList){
+            String itemDate = item.getDtTxt().substring(0, 10);
+            if (itemDate.compareTo(formattedTodayDate) > 0){
+                listItemLinkedHashMap.putIfAbsent(itemDate, item);
             }
         }
 
         listItemArrayList.clear();
-        listItemArrayList.addAll(filteredList);
+        listItemArrayList.addAll(listItemLinkedHashMap.values());
         notifyDataSetChanged();
     }
 

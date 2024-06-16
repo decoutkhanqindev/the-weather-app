@@ -3,6 +3,7 @@ package com.example.weatherapp.view;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -57,7 +58,7 @@ public class ForecastActivity extends AppCompatActivity {
                     recyclerView = binding.recyclerView2;
                     recyclerView.setLayoutManager(new LinearLayoutManager(ForecastActivity.this));
                     dailyAdapter = new DailyForecastWeatherAdapter(ForecastActivity.this, listItemArrayList);
-                    dailyAdapter.filterFromTomorrow();
+                    dailyAdapter.filterTomorrowAndUniquesDate();
                     recyclerView.setAdapter(dailyAdapter);
                 }
             }
