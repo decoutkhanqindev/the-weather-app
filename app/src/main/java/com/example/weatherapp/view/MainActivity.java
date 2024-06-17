@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updatesForecastWeatherUI(double lat, double lon) {
+    private void updateHourlyCurrentWeatherUI(double lat, double lon) {
         viewModel.getForecastWeatherResponse(lat, lon).observe(MainActivity.this, new Observer<ForecastWeatherResponse>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                             lon = location.getLongitude();
                             Log.e("onComplete: ", "lat:" + lat + "lon:" + lon);
                             updatesCurrentWeatherUI(lat, lon);
-                            updatesForecastWeatherUI(lat, lon);
+                            updateHourlyCurrentWeatherUI(lat, lon);
                         } else {
                             requestNewLocationData();
                         }
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 double lat = lastLocation.getLatitude();
                 double lon = lastLocation.getLongitude();
                 updatesCurrentWeatherUI(lat, lon);
-                updatesForecastWeatherUI(lat, lon);
+                updateHourlyCurrentWeatherUI(lat, lon);
             }
         }
     };

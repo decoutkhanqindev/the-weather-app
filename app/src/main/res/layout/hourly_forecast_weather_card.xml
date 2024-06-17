@@ -80,14 +80,14 @@
                         tools:ignore="InefficientWeight,UselessParent">
 
                         <ImageView
-                            android:id="@+id/pRainImg"
+                            android:id="@+id/pRainForecastImg"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/rain"
                             tools:ignore="ContentDescription" />
 
                         <TextView
-                            android:id="@+id/pRainText"
+                            android:id="@+id/pRainForecastText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -99,7 +99,7 @@
                             tools:ignore="HardcodedText,NestedWeights,SmallSp" />
 
                         <TextView
-                            android:id="@+id/pRainName"
+                            android:id="@+id/pRainForecastName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Rain"
@@ -118,14 +118,14 @@
                     tools:ignore="InefficientWeight,TextSizeCheck,UselessParent">
 
                     <ImageView
-                        android:id="@+id/windSpeedImg"
+                        android:id="@+id/windSpeedForecastImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/wind"
                         tools:ignore="ContentDescription" />
 
                     <TextView
-                        android:id="@+id/windSpeedText"
+                        android:id="@+id/windSpeedForecastText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -137,7 +137,7 @@
                         tools:ignore="HardcodedText,NestedWeights,SmallSp" />
 
                     <TextView
-                        android:id="@+id/windSpeedName"
+                        android:id="@+id/windSpeedForecastName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Wind"
@@ -155,14 +155,14 @@
                     tools:ignore="UselessParent">
 
                     <ImageView
-                        android:id="@+id/pHumidityImg"
+                        android:id="@+id/pHumidityForecastImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/humidity"
                         tools:ignore="ContentDescription" />
 
                     <TextView
-                        android:id="@+id/pHumidityText"
+                        android:id="@+id/pHumidityForecastText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -174,7 +174,7 @@
                         tools:ignore="HardcodedText,NestedWeights,SmallSp" />
 
                     <TextView
-                        android:id="@+id/pHumidityName"
+                        android:id="@+id/pHumidityForecastName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
