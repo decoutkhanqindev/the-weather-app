@@ -5,28 +5,29 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="5dp"
+    android:layout_margin="8dp"
     android:layout_gravity="center"
-    app:cardCornerRadius="20dp">
+    app:cardCornerRadius="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background3"
+        android:background="@drawable/background2"
         android:orientation="horizontal"
         android:padding="10dp">
 
         <ImageView
             android:id="@+id/hourlyForecastImg"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center"
             android:src="@drawable/cloudy"
             tools:ignore="ContentDescription,ImageContrastCheck" />
 
         <LinearLayout
-            android:layout_marginStart="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -57,10 +58,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 tools:ignore="UselessLeaf">
 
@@ -73,7 +74,7 @@
                     <LinearLayout
                         android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_marginEnd="8dp"
                         android:gravity="center"
                         android:orientation="vertical"
                         tools:ignore="InefficientWeight,UselessParent">
@@ -90,7 +91,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:layout_weight="1"
                             android:text="22%"
                             android:textAlignment="center"
                             android:textColor="@color/white"
@@ -102,10 +102,9 @@
                             android:id="@+id/pRainName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:text="Rain"
                             android:textColor="@color/white"
-                            android:textSize="15sp"
+                            android:textSize="12sp"
                             tools:ignore="HardcodedText,InefficientWeight" />
                     </LinearLayout>
                 </LinearLayout>
@@ -113,7 +112,7 @@
                 <LinearLayout
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginEnd="8dp"
                     android:gravity="center"
                     android:orientation="vertical"
                     tools:ignore="InefficientWeight,TextSizeCheck,UselessParent">
@@ -130,7 +129,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_weight="1"
                         android:text="12 km/h"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -142,17 +140,16 @@
                         android:id="@+id/windSpeedName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Wind"
                         android:textColor="@color/white"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         tools:ignore="HardcodedText,InefficientWeight" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginEnd="8dp"
                     android:gravity="center"
                     android:orientation="vertical"
                     tools:ignore="UselessParent">
@@ -183,7 +180,7 @@
                         android:layout_weight="1"
                         android:text="Humidity"
                         android:textColor="@color/white"
-                        android:textSize="15sp"
+                        android:textSize="12sp"
                         tools:ignore="HardcodedText,InefficientWeight" />
                 </LinearLayout>
             </LinearLayout>
