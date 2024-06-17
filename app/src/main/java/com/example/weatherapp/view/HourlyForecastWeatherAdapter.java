@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.weatherapp.R;
 import com.example.weatherapp.databinding.HourlyForecastWeatherCardBinding;
 import com.example.weatherapp.model.forecastweathermodel.ListItem;
 
@@ -33,11 +34,60 @@ public class HourlyForecastWeatherAdapter extends RecyclerView.Adapter<HourlyFor
         return new HourlyForecastWeatherAdapterViewHolder(binding);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull HourlyForecastWeatherAdapterViewHolder holder, int position) {
         ListItem listItem = listItemArrayList.get(position);
 
         holder.binding.hourlyForecastText.setText(listItem.getDtTxt().substring(11, 16));
+
+        double temp = (double) listItem.getMain().getTemp();
+        double tempCelsius = temp - 273.15;
+        @SuppressLint("DefaultLocale") String formattedTemp = String.format("%.0f°C", tempCelsius);
+        holder.binding.hourlyTempText.setText(formattedTemp );
+
+        String mainGroup = listItem.getWeather().get(0).getMain();
+        switch (mainGroup) {
+            case "Thunderstorm":
+                holder.binding.hourlyForecastImg.setImageResource(R.drawable.storm);
+                break;
+            case "Rain":
+                holder.binding.hourlyForecastImg.setImageResource(R.drawable.rainy);
+                break;
+            case "Snow":
+                holder.binding.hourlyForecastImg.setImageResource(R.drawable.snowy);
+                break;
+            case "Atmosphere":
+                holder.binding.hourlyForecastImg.setImageResource(R.drawable.atmosphere);
+                break;
+            case "Clear":
+                holder.binding.hourlyForecastImg.setImageResource(R.drawable.sunny);
+                break;
+            default:
+                holder.binding.hourlyForecastImg.setImageResource(R.drawable.cloudy);
+                break;
+        }
+
+        if (listItem.getRain() != null) {
+            Double pRain = (Double) listItem.getRain().getJsonMember3h();
+            holder.binding.pRainForecastText.setText((pRain * 100) + "%");
+        } else {
+            holder.binding.pRainForecastText.setText("0%");
+        }
+
+        if (listItem.getWind() != null){
+            Double speed = (Double) listItem.getWind().getSpeed();
+            holder.binding.windSpeedForecastText.setText((speed) + " m/s");
+        } else {
+            holder.binding.windSpeedForecastText.setText("error");
+        }
+
+        if (listItem.getMain().getHumidity() != 0){
+            int pHumidity = listItem.getMain().getHumidity();
+            holder.binding.pHumidityForecastText.setText(pHumidity + "%");
+        } else {
+            holder.binding.pHumidityForecastText.setText("error");
+        }
     }
 
     @Override
