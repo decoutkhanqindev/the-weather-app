@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.weatherapp.databinding.ForecastWeatherCardBinding;
+import com.example.weatherapp.databinding.DailyForecastWeatherCardBinding;
 import com.example.weatherapp.model.forecastweathermodel.ListItem;
 
 import java.text.ParseException;
@@ -29,11 +31,15 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
         this.listItemArrayList = listItemArrayList;
     }
 
+    public ArrayList<ListItem> getListItemArrayList() {
+        return listItemArrayList;
+    }
+
     @NonNull
     @Override
     public DailyForecastWeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        ForecastWeatherCardBinding binding = ForecastWeatherCardBinding.inflate(layoutInflater, parent, false);
+        DailyForecastWeatherCardBinding binding = DailyForecastWeatherCardBinding.inflate(layoutInflater, parent, false);
         return new DailyForecastWeatherViewHolder(binding);
     }
 
@@ -48,10 +54,22 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
         try {
             Date currentDate = inputFormat.parse(itemDate);
             String currentFormattedDate = outputFormat.format(currentDate);
-            holder.binding.dateForecast.setText(currentFormattedDate);
+            holder.binding.dayForecast.setText(currentFormattedDate);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
+        // Bắt sự kiện nhấn để bật/tắt RecyclerView3
+        holder.binding.dayForecast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.binding.recyclerView3.getVisibility() == View.VISIBLE){
+                    holder.binding.recyclerView3.setVisibility(View.GONE);
+                } else {
+                    holder.binding.recyclerView3.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -79,9 +97,9 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
     }
 
     public static class DailyForecastWeatherViewHolder extends RecyclerView.ViewHolder {
-        private final ForecastWeatherCardBinding binding;
+        private final DailyForecastWeatherCardBinding binding;
 
-        public DailyForecastWeatherViewHolder(@NonNull ForecastWeatherCardBinding binding) {
+        public DailyForecastWeatherViewHolder(@NonNull DailyForecastWeatherCardBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
