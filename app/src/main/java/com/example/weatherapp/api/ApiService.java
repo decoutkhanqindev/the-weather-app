@@ -8,12 +8,12 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface ApiService {
-    // current weather
+    // current weather end point
     @GET("data/2.5/weather")
     Call<CurrentWeatherResponse> getCurrentWeather (@Query("lat") double lat,
                                                    @Query("lon") double lon,
                                                    @Query("appid") String apiKey);
-
+    // forecast weather end point
     @GET("data/2.5/forecast")
     Call<ForecastWeatherResponse> getForecastWeather (@Query("lat") double lat,
                                                       @Query("lon") double lon,

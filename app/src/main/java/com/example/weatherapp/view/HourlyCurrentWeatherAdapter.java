@@ -15,6 +15,7 @@ import com.example.weatherapp.model.forecastweathermodel.ListItem;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class HourlyCurrentWeatherAdapter extends RecyclerView.Adapter<HourlyCurrentWeatherAdapter.HourlyCurrentWeatherViewHolder> {
     private final Context context;
@@ -37,20 +38,20 @@ public class HourlyCurrentWeatherAdapter extends RecyclerView.Adapter<HourlyCurr
     public void onBindViewHolder(@NonNull HourlyCurrentWeatherViewHolder holder, int position) {
         ListItem listItem = listItems.get(position);
 
-        // Lọc các mục cho ngày hiện tại
-        @SuppressLint("SimpleDateFormat") String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        String itemDate = listItem.getDtTxt().substring(0, 10); // Lấy phần đầu tiên yyyy-MM-dd từ dt_txt
+        // Get today's date
+        String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String itemDate = listItem.getDtTxt().substring(0, 10); // Extract yyyy-MM-dd from dt_txt
 
+        // Only display items for the current day
         if (!todayDate.equals(itemDate)) {
-            // Nếu không phải ngày hôm nay, không làm gì cả
-            return;
+            return; // Skip non-current day items
         }
 
-        // Xử lý thời gian
-        String time = listItem.getDtTxt().substring(11, 16); // Lấy phần giờ từ dt_txt (HH:mm)
+        // Display time
+        String time = listItem.getDtTxt().substring(11, 16); // Extract HH:mm from dt_txt
         holder.binding.hourlyText.setText(time);
 
-        // Xử lý icon thời tiết
+        // Display weather icon based on weather condition
         String mainGroup = listItem.getWeather().get(0).getMain();
         switch (mainGroup) {
             case "Thunderstorm":
@@ -73,10 +74,10 @@ public class HourlyCurrentWeatherAdapter extends RecyclerView.Adapter<HourlyCurr
                 break;
         }
 
-        // Xử lý nhiệt độ
+        // Display temperature
         double temp = (double) listItem.getMain().getTemp();
         double tempCelsius = temp - 273.15;
-        @SuppressLint("DefaultLocale") String formattedTemp = String.format("%.0f°C", tempCelsius);
+        String formattedTemp = String.format(Locale.getDefault(), "%.0f°C", tempCelsius);
         holder.binding.hourlyTempText.setText(formattedTemp);
     }
 
@@ -85,14 +86,14 @@ public class HourlyCurrentWeatherAdapter extends RecyclerView.Adapter<HourlyCurr
         return listItems.size();
     }
 
-    // Phương thức này sẽ lọc dữ liệu để chỉ hiển thị các mốc thời gian của ngày hiện tại
+    // Filter the list to show only items for the current day
     @SuppressLint("NotifyDataSetChanged")
     public void filterCurrentDay() {
-        @SuppressLint("SimpleDateFormat") String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         ArrayList<ListItem> filteredList = new ArrayList<>();
 
         for (ListItem item : listItems) {
-            String itemDate = item.getDtTxt().substring(0, 10); // Lấy phần đầu tiên yyyy-MM-dd từ dt_txt
+            String itemDate = item.getDtTxt().substring(0, 10); // Extract yyyy-MM-dd from dt_txt
             if (todayDate.equals(itemDate)) {
                 filteredList.add(item);
             }

@@ -1,6 +1,5 @@
 package com.example.weatherapp.view;
 
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,7 +11,6 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -37,21 +35,18 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
-
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mainBinding;
     private WeatherViewModel viewModel;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
-    int PERMISSION_ID = 44;
+    private final int PERMISSION_ID = 44;
 
     private double lat = 0, lon = 0;
 
@@ -79,101 +74,100 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
 
-        mainBinding.next3h5daysBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ForecastActivity.class);
-                intent.putExtra("lat", lat);
-                intent.putExtra("lon", lon);
-                startActivity(intent);
-            }
+        mainBinding.next3h5daysBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ForecastActivity.class);
+            intent.putExtra("lat", lat);
+            intent.putExtra("lon", lon);
+            startActivity(intent);
         });
     }
 
     private void updatesCurrentWeatherUI(double lat, double lon) {
-        viewModel.getCurrentWeatherResponse(lat, lon).observe(MainActivity.this, new Observer<CurrentWeatherResponse>() {
+        viewModel.getCurrentWeatherResponse(lat, lon).observe(this, new Observer<CurrentWeatherResponse>() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onChanged(CurrentWeatherResponse currentWeatherResponse) {
                 if (currentWeatherResponse != null) {
-                    mainBinding.cityName.setText(currentWeatherResponse.getName());
-                    mainBinding.weatherDescriptionText.setText(currentWeatherResponse.getWeather().get(0).getDescription());
-
-                    String mainGroup = currentWeatherResponse.getWeather().get(0).getMain();
-                    switch (mainGroup) {
-                        case "Thunderstorm":
-                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.storm);
-                            break;
-                        case "Rain":
-                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.rainy);
-                            break;
-                        case "Snow":
-                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.snowy);
-                            break;
-                        case "Atmosphere":
-                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.atmosphere);
-                            break;
-                        case "Clear":
-                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.sunny);
-                            break;
-                        default:
-                            mainBinding.weatherDescriptionImg.setImageResource(R.drawable.cloudy);
-                            break;
-                    }
-
-                    long timestamp = currentWeatherResponse.getDt();
-                    Date date = new Date(timestamp * 1000L);
-                    @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMMM dd '|' hh:mm a");
-                    simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                    String formattedDate = simpleDateFormat.format(date);
-                    mainBinding.dateText.setText(formattedDate);
-
-                    double currentTemp = (double) currentWeatherResponse.getMain().getTemp();
-                    double tempCelsius = currentTemp - 273.15;
-                    @SuppressLint("DefaultLocale") String formattedTemp = String.format("%.0f", tempCelsius) + "°C";
-                    mainBinding.currentTemp.setText(formattedTemp);
-
-                    double maxTemp = (double) currentWeatherResponse.getMain().getTempMax();
-                    double maxTempCelsius = maxTemp - 273.15;
-                    double minTemp = (double) currentWeatherResponse.getMain().getTempMin();
-                    double minTempCelsius = minTemp - 273.15;
-                    @SuppressLint("DefaultLocale") String formattedMinMaxTemp = String.format("L:%.0f°  H:%.0f°", minTempCelsius, maxTempCelsius);
-                    mainBinding.minMaxTemp.setText(formattedMinMaxTemp);
-
-                    if (currentWeatherResponse.getRain() != null) {
-                        Double pRain = currentWeatherResponse.getRain().getJsonMember1h();
-                        mainBinding.pRainText.setText((pRain * 100) + "%");
-                    } else {
-                        mainBinding.pRainText.setText("0%");
-                    }
-
-                    if (currentWeatherResponse.getWind() != null){
-                        Double speed = currentWeatherResponse.getWind().getSpeed();
-                        mainBinding.windSpeedText.setText((speed) + " m/s");
-                    } else {
-                        mainBinding.windSpeedText.setText("error");
-                    }
-
-                    if (currentWeatherResponse.getMain().getHumidity() != 0){
-                        int pHumidity = currentWeatherResponse.getMain().getHumidity();
-                        mainBinding.pHumidityText.setText(pHumidity + "%");
-                    } else {
-                        mainBinding.pHumidityText.setText("error");
-                    }
+                    // Update UI with current weather data
+                    updateCurrentWeatherUI(currentWeatherResponse);
                 }
             }
         });
     }
 
+    @SuppressLint("SetTextI18n")
+    private void updateCurrentWeatherUI(CurrentWeatherResponse currentWeatherResponse) {
+        mainBinding.cityName.setText(currentWeatherResponse.getName());
+        mainBinding.weatherDescriptionText.setText(currentWeatherResponse.getWeather().get(0).getDescription());
+
+        setWeatherIcon(currentWeatherResponse.getWeather().get(0).getMain());
+
+        long timestamp = currentWeatherResponse.getDt();
+        Date date = new Date(timestamp * 1000L);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMMM dd '|' hh:mm a");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String formattedDate = simpleDateFormat.format(date);
+        mainBinding.dateText.setText(formattedDate);
+
+        double currentTemp = (double) currentWeatherResponse.getMain().getTemp() - 273.15;
+        @SuppressLint("DefaultLocale") String formattedTemp = String.format("%.0f°C", currentTemp);
+        mainBinding.currentTemp.setText(formattedTemp);
+
+        double maxTemp = (double) currentWeatherResponse.getMain().getTempMax() - 273.15;
+        double minTemp = (double) currentWeatherResponse.getMain().getTempMin() - 273.15;
+        @SuppressLint("DefaultLocale") String formattedMinMaxTemp = String.format("L:%.0f°  H:%.0f°", minTemp, maxTemp);
+        mainBinding.minMaxTemp.setText(formattedMinMaxTemp);
+
+        if (currentWeatherResponse.getRain() != null) {
+            Double pRain = currentWeatherResponse.getRain().getJsonMember1h();
+            mainBinding.pRainText.setText((pRain * 100) + "%");
+        } else {
+            mainBinding.pRainText.setText("0%");
+        }
+
+        if (currentWeatherResponse.getWind() != null) {
+            Double speed = currentWeatherResponse.getWind().getSpeed();
+            mainBinding.windSpeedText.setText(speed + " m/s");
+        } else {
+            mainBinding.windSpeedText.setText("error");
+        }
+
+        int pHumidity = currentWeatherResponse.getMain().getHumidity();
+        mainBinding.pHumidityText.setText(pHumidity + "%");
+    }
+
+    private void setWeatherIcon(String mainGroup) {
+        switch (mainGroup) {
+            case "Thunderstorm":
+                mainBinding.weatherDescriptionImg.setImageResource(R.drawable.storm);
+                break;
+            case "Rain":
+                mainBinding.weatherDescriptionImg.setImageResource(R.drawable.rainy);
+                break;
+            case "Snow":
+                mainBinding.weatherDescriptionImg.setImageResource(R.drawable.snowy);
+                break;
+            case "Atmosphere":
+                mainBinding.weatherDescriptionImg.setImageResource(R.drawable.atmosphere);
+                break;
+            case "Clear":
+                mainBinding.weatherDescriptionImg.setImageResource(R.drawable.sunny);
+                break;
+            default:
+                mainBinding.weatherDescriptionImg.setImageResource(R.drawable.cloudy);
+                break;
+        }
+    }
+
     private void updateHourlyCurrentWeatherUI(double lat, double lon) {
-        viewModel.getForecastWeatherResponse(lat, lon).observe(MainActivity.this, new Observer<ForecastWeatherResponse>() {
+        viewModel.getForecastWeatherResponse(lat, lon).observe(this, new Observer<ForecastWeatherResponse>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onChanged(ForecastWeatherResponse forecastWeatherResponse) {
                 if (forecastWeatherResponse != null) {
                     listItemArrayList = forecastWeatherResponse.getList();
                     recyclerView = mainBinding.recyclerView;
-                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL,false));
+                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
                     adapter = new HourlyCurrentWeatherAdapter(MainActivity.this, listItemArrayList);
                     adapter.filterCurrentDay();
                     recyclerView.setAdapter(adapter);
@@ -182,37 +176,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     @SuppressLint("MissingPermission")
     private void getLastLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-                fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        Location location = task.getResult();
-                        if (location != null) {
-                            lat = location.getLatitude();
-                            lon = location.getLongitude();
-                            Log.e("onComplete: ", "lat:" + lat + "lon:" + lon);
-                            updatesCurrentWeatherUI(lat, lon);
-                            updateHourlyCurrentWeatherUI(lat, lon);
-                        } else {
-                            requestNewLocationData();
-                        }
+                fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
+                    Location location = task.getResult();
+                    if (location != null) {
+                        lat = location.getLatitude();
+                        lon = location.getLongitude();
+                        Log.e("onComplete: ", "lat:" + lat + "lon:" + lon);
+                        updatesCurrentWeatherUI(lat, lon);
+                        updateHourlyCurrentWeatherUI(lat, lon);
+                    } else {
+                        requestNewLocationData();
                     }
                 });
             } else {
-                Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
+                // Location is not enabled, prompt user to enable it
+                showLocationSettingsDialog();
             }
         } else {
-            // if permissions aren't available,
-            // request for permissions
+            // Request permissions if they are not granted
             requestPermissions();
         }
     }
 
+    private void showLocationSettingsDialog() {
+        Toast.makeText(this, "Please turn on your location...", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+    }
 
     private boolean checkPermissions() {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED

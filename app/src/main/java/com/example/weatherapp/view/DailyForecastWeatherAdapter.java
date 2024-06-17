@@ -2,11 +2,8 @@ package com.example.weatherapp.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,17 +15,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-
 public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForecastWeatherAdapter.DailyForecastWeatherViewHolder> {
-    Context context;
-    ArrayList<ListItem> listItemArrayList;
-    LinkedHashMap<String, ArrayList<ListItem>> filteredData;
-    OnDayForecastClickListener onDayForecastClickListener;
+    private final Context context;
+    private final ArrayList<ListItem> listItemArrayList;
+    private final LinkedHashMap<String, ArrayList<ListItem>> filteredData;
+    private OnDayForecastClickListener onDayForecastClickListener;
 
     public DailyForecastWeatherAdapter(Context context, ArrayList<ListItem> listItemArrayList) {
         this.context = context;
@@ -56,10 +52,10 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
     public void onBindViewHolder(@NonNull DailyForecastWeatherViewHolder holder, int position) {
         ListItem listItem = listItemArrayList.get(position);
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
-        String itemDate = listItem.getDtTxt(); // Định dạng chuỗi ban đầu: yyyy-MM-dd HH:mm:ss\
+        String itemDate = listItem.getDtTxt();
         try {
             Date currentDate = inputFormat.parse(itemDate);
             String currentFormattedDate = outputFormat.format(currentDate);
@@ -68,13 +64,9 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
             throw new RuntimeException(e);
         }
 
-        // Bắt sự kiện nhấn để bật/tắt RecyclerView3
-        holder.binding.dayForecast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onDayForecastClickListener != null) {
-                    onDayForecastClickListener.onDayForecastClick(itemDate.substring(0, 10));
-                }
+        holder.binding.dayForecast.setOnClickListener(v -> {
+            if (onDayForecastClickListener != null) {
+                onDayForecastClickListener.onDayForecastClick(itemDate.substring(0, 10));
             }
         });
     }
@@ -86,7 +78,7 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
 
     public int getItemPosition(String date) {
         for (int i = 0; i < listItemArrayList.size(); i++) {
-            if (listItemArrayList.get(i).getDtTxt().substring(0, 10).equals(date)) {
+            if (listItemArrayList.get(i).getDtTxt().startsWith(date)) {
                 return i;
             }
         }
@@ -94,9 +86,9 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void filterTomorrowAndUniquesDate(){
+    public void filterTomorrowAndUniquesDate() {
         Date todayDate = new Date();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat spfDate = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat spfDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String formattedTodayDate = spfDate.format(todayDate);
         LinkedHashMap<String, ArrayList<ListItem>> tempMap = new LinkedHashMap<>();
 
@@ -119,7 +111,7 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
     public static class DailyForecastWeatherViewHolder extends RecyclerView.ViewHolder {
         final DailyForecastWeatherCardBinding binding;
 
-        public DailyForecastWeatherViewHolder(@NonNull DailyForecastWeatherCardBinding binding) {
+        DailyForecastWeatherViewHolder(@NonNull DailyForecastWeatherCardBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
