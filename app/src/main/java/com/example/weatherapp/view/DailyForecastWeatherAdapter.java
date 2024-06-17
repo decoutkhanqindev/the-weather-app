@@ -69,7 +69,6 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
         }
 
         // Bắt sự kiện nhấn để bật/tắt RecyclerView3
-        // Bắt sự kiện nhấn để bật/tắt RecyclerView3
         holder.binding.dayForecast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +82,15 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
     @Override
     public int getItemCount() {
         return listItemArrayList.size();
+    }
+
+    public int getItemPosition(String date) {
+        for (int i = 0; i < listItemArrayList.size(); i++) {
+            if (listItemArrayList.get(i).getDtTxt().substring(0, 10).equals(date)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -109,7 +117,7 @@ public class DailyForecastWeatherAdapter extends RecyclerView.Adapter<DailyForec
     }
 
     public static class DailyForecastWeatherViewHolder extends RecyclerView.ViewHolder {
-        private final DailyForecastWeatherCardBinding binding;
+        final DailyForecastWeatherCardBinding binding;
 
         public DailyForecastWeatherViewHolder(@NonNull DailyForecastWeatherCardBinding binding) {
             super(binding.getRoot());
